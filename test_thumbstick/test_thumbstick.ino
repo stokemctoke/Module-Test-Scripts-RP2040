@@ -1,30 +1,29 @@
 /*
   Test sketch: 8-pin Thumbstick Module
-  5-direction joystick (UP/DOWN/LEFT/RIGHT/CENTER) + 2 extra buttons
+  5-direction joystick (UP/DOWN/LEFT/RIGHT/MID) + SET and RESET buttons
   Board: Waveshare RP2040 Zero
 
   Wiring (adjust pin numbers to match your setup):
-    Pin 1 (UP)     -> GP6
-    Pin 2 (DOWN)   -> GP7
-    Pin 3 (LEFT)   -> GP8
-    Pin 4 (RIGHT)  -> GP9
-    Pin 5 (CENTER) -> GP10
-    Pin 6 (BTN_A)  -> GP11
-    Pin 7 (BTN_B)  -> GP12
-    Pin 8 (GND)    -> GND
-    VCC (if present) -> 3.3V
+    Pin 1 (COM)   -> GND
+    Pin 2 (UP)    -> GP6
+    Pin 3 (DOWN)  -> GP7
+    Pin 4 (LEFT)  -> GP8
+    Pin 5 (RIGHT) -> GP9
+    Pin 6 (MID)   -> GP10
+    Pin 7 (SET)   -> GP11
+    Pin 8 (RESET) -> GP12
 
   All inputs are active-LOW; internal pull-ups are enabled.
   No extra library required.
 */
 
-#define PIN_UP      6
-#define PIN_DOWN    7
-#define PIN_LEFT    8
-#define PIN_RIGHT   9
-#define PIN_CENTER 10
-#define PIN_BTN_A  11
-#define PIN_BTN_B  12
+#define PIN_UP     6
+#define PIN_DOWN   7
+#define PIN_LEFT   8
+#define PIN_RIGHT  9
+#define PIN_MID   10
+#define PIN_SET   11
+#define PIN_RESET 12
 
 #define DEBOUNCE_MS     50
 #define PROMPT_TIMEOUT 5000   // ms to wait for each input during guided test
@@ -36,13 +35,13 @@ struct Input {
 };
 
 const Input INPUTS[] = {
-  { "UP",     PIN_UP     },
-  { "DOWN",   PIN_DOWN   },
-  { "LEFT",   PIN_LEFT   },
-  { "RIGHT",  PIN_RIGHT  },
-  { "CENTER", PIN_CENTER },
-  { "BTN_A",  PIN_BTN_A  },
-  { "BTN_B",  PIN_BTN_B  },
+  { "UP",    PIN_UP    },
+  { "DOWN",  PIN_DOWN  },
+  { "LEFT",  PIN_LEFT  },
+  { "RIGHT", PIN_RIGHT },
+  { "MID",   PIN_MID   },
+  { "SET",   PIN_SET   },
+  { "RESET", PIN_RESET },
 };
 const int INPUT_COUNT = sizeof(INPUTS) / sizeof(INPUTS[0]);
 
@@ -123,18 +122,18 @@ bool testIndividual() {
 
 // ----- Test 3: simultaneous buttons -----
 bool testSimultaneous() {
-  Serial.println("\nTest 3: hold BTN_A + BTN_B together for 2 seconds...");
+  Serial.println("\nTest 3: hold SET + RESET together for 2 seconds...");
   delay(2000);
-  bool aOk = (digitalRead(PIN_BTN_A) == LOW);
-  bool bOk = (digitalRead(PIN_BTN_B) == LOW);
-  if (aOk && bOk) {
-    Serial.println("  OK: both BTN_A and BTN_B detected simultaneously");
+  bool setOk   = (digitalRead(PIN_SET)   == LOW);
+  bool resetOk = (digitalRead(PIN_RESET) == LOW);
+  if (setOk && resetOk) {
+    Serial.println("  OK: both SET and RESET detected simultaneously");
     return true;
   }
-  Serial.print("  FAIL — BTN_A=");
-  Serial.print(aOk ? "pressed" : "not pressed");
-  Serial.print("  BTN_B=");
-  Serial.println(bOk ? "pressed" : "not pressed");
+  Serial.print("  FAIL — SET=");
+  Serial.print(setOk   ? "pressed" : "not pressed");
+  Serial.print("  RESET=");
+  Serial.println(resetOk ? "pressed" : "not pressed");
   return false;
 }
 

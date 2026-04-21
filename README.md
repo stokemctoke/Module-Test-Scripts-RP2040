@@ -69,26 +69,26 @@ Ends with `ALL TESTS PASS` on the display and in Serial Monitor.
 
 ### 8-pin Thumbstick Module (`test_thumbstick/`)
 
-5-direction joystick (UP / DOWN / LEFT / RIGHT / CENTER press) plus 2 extra buttons.
+5-direction joystick (UP / DOWN / LEFT / RIGHT / MID press) plus SET and RESET buttons.
 All inputs are digital active-LOW; internal pull-ups are enabled automatically.
 
 | Module Pin | Function | RP2040 Zero |
 |------------|----------|-------------|
-| 1          | UP       | GP6         |
-| 2          | DOWN     | GP7         |
-| 3          | LEFT     | GP8         |
-| 4          | RIGHT    | GP9         |
-| 5          | CENTER   | GP10        |
-| 6          | BTN_A    | GP11        |
-| 7          | BTN_B    | GP12        |
-| 8          | GND      | GND         |
+| 1          | COM      | GND         |
+| 2          | UP       | GP6         |
+| 3          | DOWN     | GP7         |
+| 4          | LEFT     | GP8         |
+| 5          | RIGHT    | GP9         |
+| 6          | MID      | GP10        |
+| 7          | SET      | GP11        |
+| 8          | RESET    | GP12        |
 
 **No extra library needed.**
 
 **Tests run:**
 1. Idle state — verifies all inputs read released at startup
 2. Guided individual detection — prompts you to press each input in sequence (5s per input), verifies correct detection
-3. Simultaneous BTN_A + BTN_B — hold both at once to verify no blocking
+3. Simultaneous SET + RESET — hold both at once to verify no blocking
 4. 30-second live monitor — prints any state change to Serial Monitor in real time
 
 ---
